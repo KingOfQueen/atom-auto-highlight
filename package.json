@@ -3,7 +3,7 @@
   "main": "./lib/main",
   "version": "0.13.1",
   "description": "Highlight text automatically on cursor(even without selection).",
-  "repository": "https://github.com/davideuler/atom-quick-highlight",
+  "repository": "https://github.com/davideuler/atom-auto-highlight",
   "license": "MIT",
   "engines": {
     "atom": "^1.13.0-beta1"

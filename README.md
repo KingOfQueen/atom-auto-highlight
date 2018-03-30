@@ -1,14 +1,16 @@
-# auto-highlight [![Build Status](https://travis-ci.org/t9md/atom-auto-highlight.svg?branch=master)](https://travis-ci.org/t9md/atom-auto-highlight)
+# Auto-highlight [![Build Status](https://travis-ci.org/t9md/atom-auto-highlight.svg?branch=master)](https://travis-ci.org/t9md/atom-auto-highlight)
 
-- Highlight selected and multiple persisting highlight across visible editor.
-![gif](https://raw.githubusercontent.com/t9md/t9md/f51b8e211e9ed8ed455053be52d5505da876b298/img/atom-auto-highlight.gif)
+- Forked from: https://github.com/t9md/atom-quick-highlight
+
+- Word under cursor and all its occurences would be highlighted automatically.
+
+- Max highlighted number of words default to 2, you can change the settings to 1 or others in the plugin settings.
 
 - Show found count on StatusBar.
-![gif](https://raw.githubusercontent.com/t9md/t9md/a00e64b9dd85b851ad23c28e830f4a7d7dbe6dcf/img/atom-auto-highlight.png)
 
 # Commands
 
-- `auto-highlight:toggle` toggle highlight for selected or cursor word.
+- `auto-highlight:toggle` toggle highlight for selected or cursor word. In fact you don't need to run the command manually.
 - `auto-highlight:clear` clear all highlight.
 
 And following two operator for [vim-mode-plus](https://atom.io/packages/vim-mode-plus) user.
@@ -98,4 +100,4 @@ e.g.
 # TODO
 
 * [x] Improve default to dynamically change using [color-channel](http://lesscss.org/functions/#color-channel)?
-* [ ] Highlight with RegExp.
+* [ ] To highlight whole word except prefix matched ones.
