@@ -3,7 +3,7 @@ _ = require 'underscore-plus'
 # Helpers
 # -------------------------
 getDecorations = (editor) ->
-  pattern = /^quick-highlight/
+  pattern = /^auto-highlight/
 
   decorations = []
   for id, decoration of editor.decorationsStateForScreenRowRange(0, editor.getLineCount())
@@ -14,7 +14,7 @@ getDecorations = (editor) ->
 ensureDecorations = (editor, options) ->
   decorations = getDecorations(editor)
   groupedDecoration = _.groupBy decorations, (decoration) ->
-    decoration.properties.class.replace(/^quick-highlight /, '')
+    decoration.properties.class.replace(/^auto-highlight /, '')
 
   toText = ({bufferRange}) -> editor.getTextInBufferRange(bufferRange)
   for color, texts of options
@@ -26,7 +26,7 @@ ensureDecorations = (editor, options) ->
 
 # Main
 # -------------------------
-describe "quick-highlight", ->
+describe "auto-highlight", ->
   [editor, editorContent, editorElement, main] = []
 
   dispatchCommand = (command, {element}={}) ->
@@ -46,7 +46,7 @@ describe "quick-highlight", ->
       """
 
     waitsForPromise ->
-      atom.packages.activatePackage("quick-highlight").then (pack) ->
+      atom.packages.activatePackage("auto-highlight").then (pack) ->
         main = pack.mainModule
 
     waitsForPromise ->
@@ -56,34 +56,34 @@ describe "quick-highlight", ->
         editor.setCursorBufferPosition([0, 0])
         editorElement = editor.element
 
-  describe "quick-highlight:toggle", ->
+  describe "auto-highlight:toggle", ->
     it "highlight keyword under cursor", ->
-      dispatchCommand('quick-highlight:toggle')
+      dispatchCommand('auto-highlight:toggle')
       ensureDecorations(editor, "underline-01": ['orange', 'orange', 'orange'])
 
     it "remove decoration when if already decorated", ->
-      dispatchCommand('quick-highlight:toggle')
+      dispatchCommand('auto-highlight:toggle')
       ensureDecorations(editor, "underline-01": ['orange', 'orange', 'orange'])
-      dispatchCommand('quick-highlight:toggle')
+      dispatchCommand('auto-highlight:toggle')
       expect(getDecorations(editor)).toHaveLength(0)
 
     it "can decorate multiple keyword simultaneously", ->
-      dispatchCommand('quick-highlight:toggle')
+      dispatchCommand('auto-highlight:toggle')
       ensureDecorations editor,
         "underline-01": ['orange', 'orange', 'orange']
       editor.setCursorBufferPosition([1, 3])
-      dispatchCommand('quick-highlight:toggle')
+      dispatchCommand('auto-highlight:toggle')
       ensureDecorations editor,
         "underline-01": ['orange', 'orange', 'orange']
         "underline-02": ['apple', 'apple', 'apple']
 
-  describe "quick-highlight:clear", ->
+  describe "auto-highlight:clear", ->
     it "clear all decorations", ->
-      dispatchCommand('quick-highlight:toggle')
+      dispatchCommand('auto-highlight:toggle')
       editor.setCursorBufferPosition([1, 3])
-      dispatchCommand('quick-highlight:toggle')
+      dispatchCommand('auto-highlight:toggle')
       expect(getDecorations(editor)).toHaveLength(6)
-      dispatchCommand('quick-highlight:clear')
+      dispatchCommand('auto-highlight:clear')
       expect(getDecorations(editor)).toHaveLength(0)
 
   describe "multiple editors is displayed", ->
@@ -100,12 +100,12 @@ describe "quick-highlight", ->
         expect(atom.workspace.getActiveTextEditor()).toBe(editor2)
 
     it "can highlight keyword across editors", ->
-      dispatchCommand('quick-highlight:toggle', editor2Element)
+      dispatchCommand('auto-highlight:toggle', editor2Element)
       ensureDecorations(editor, "underline-01": ['orange', 'orange', 'orange'])
       ensureDecorations(editor2, "underline-01": ['orange', 'orange', 'orange'])
 
     it "decorate keywords when new editor was opened", ->
-      dispatchCommand('quick-highlight:toggle', editor2Element)
+      dispatchCommand('auto-highlight:toggle', editor2Element)
       editor3 = null
       pathSample3 = atom.project.resolvePath("sample-3")
 
@@ -136,7 +136,7 @@ describe "quick-highlight", ->
       expect(getDecorations(editor)).toHaveLength(0)
 
     it "won't highlight selectedText length is less than highlightSelectionMinimumLength", ->
-      atom.config.set("quick-highlight.highlightSelectionMinimumLength", 3)
+      atom.config.set("auto-highlight.highlightSelectionMinimumLength", 3)
       dispatchCommand('core:select-right')
       advanceClock(150)
       expect(editor.getSelectedText()).toBe "o"
@@ -165,7 +165,7 @@ describe "quick-highlight", ->
       expect(getDecorations(editor)).toHaveLength 0
 
     it "won't highlight when highlightSelection is disabled", ->
-      atom.config.set('quick-highlight.highlightSelection', false)
+      atom.config.set('auto-highlight.highlightSelection', false)
       dispatchCommand('editor:select-word')
       advanceClock(150)
       expect(editor.getSelectedText()).toBe "orange"
@@ -173,7 +173,7 @@ describe "quick-highlight", ->
 
     describe "highlightSelectionExcludeScopes", ->
       beforeEach ->
-        atom.config.set('quick-highlight.highlightSelectionExcludeScopes', [
+        atom.config.set('auto-highlight.highlightSelectionExcludeScopes', [
             'foo.bar',
             'hoge',
           ])
@@ -194,7 +194,7 @@ describe "quick-highlight", ->
 
     describe "highlightSelectionDelay", ->
       beforeEach ->
-        atom.config.set('quick-highlight.highlightSelectionDelay', 300)
+        atom.config.set('auto-highlight.highlightSelectionDelay', 300)
 
       it "highlight selection after specified delay", ->
         dispatchCommand('editor:select-word')
@@ -221,18 +221,18 @@ describe "quick-highlight", ->
         waitsFor -> main.keywordManager.statusBarManager.tile?
 
         runs ->
-          container = atom.views.getView(atom.workspace).querySelector('#status-bar-quick-highlight')
+          container = atom.views.getView(atom.workspace).querySelector('#status-bar-auto-highlight')
           span = container.querySelector('span')
 
       it 'display latest highlighted count on statusbar', ->
         editor.setCursorBufferPosition([0, 0])
-        dispatchCommand('quick-highlight:toggle')
+        dispatchCommand('auto-highlight:toggle')
         ensureDecorations(editor, "underline-01": ['apple', 'apple'])
         expect(container.style.display).toBe 'inline-block'
         expect(span.textContent).toBe '2'
 
         editor.setCursorBufferPosition([1, 0])
-        dispatchCommand('quick-highlight:toggle')
+        dispatchCommand('auto-highlight:toggle')
         ensureDecorations editor,
           "underline-01": ['apple', 'apple']
           "underline-02": ['orange', 'orange', 'orange']
@@ -240,7 +240,7 @@ describe "quick-highlight", ->
         expect(span.textContent).toBe '3'
 
         editor.setCursorBufferPosition([1, 10])
-        dispatchCommand('quick-highlight:toggle')
+        dispatchCommand('auto-highlight:toggle')
         ensureDecorations editor,
           "underline-01": ['apple', 'apple']
           "underline-02": ['orange', 'orange', 'orange']

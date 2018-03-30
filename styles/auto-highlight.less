@@ -16,7 +16,7 @@
 }
 
 .box(@name, @color) {
-  .quick-highlight.@{name} .region {
+  .auto-highlight.@{name} .region {
     .round-box;
     .color(border-color, @color);
   }
@@ -25,7 +25,7 @@
 // Selection highlight
 @sbase: @syntax-result-marker-color;
 .box(@name) {
-  .quick-highlight.@{name} .region {
+  .auto-highlight.@{name} .region {
     .round-box;
     border-width: 0px;
     background-color: hsla(hue(@sbase), saturation(@sbase), lightness(@sbase), 0.3);
@@ -33,13 +33,13 @@
 }
 
 .highlight(@name, @color) {
-  .quick-highlight.@{name} .region {
+  .auto-highlight.@{name} .region {
     background-color: fade(@color, 50%);
   }
 }
 
 .underline(@name, @color) {
-  .quick-highlight.@{name} .region {
+  .auto-highlight.@{name} .region {
     .color(border-color, @color);
     box-sizing: border-box;
     border-width: 0px;

@@ -1,9 +1,9 @@
 {
-  "name": "quick-highlight",
+  "name": "auto-highlight",
   "main": "./lib/main",
-  "version": "0.13.0",
-  "description": "Highlight text quickly.",
-  "repository": "https://github.com/t9md/atom-quick-highlight",
+  "version": "0.13.1",
+  "description": "Highlight text automatically on cursor(even without selection).",
+  "repository": "https://github.com/davideuler/atom-quick-highlight",
   "license": "MIT",
   "engines": {
     "atom": "^1.13.0-beta1"
@@ -18,7 +18,7 @@
         "box",
         "highlight"
       ],
-      "description": "Decoation style for highlight"
+      "description": "Decoration style for highlight"
     },
     "highlightSelection": {
       "order": 1,
@@ -32,6 +32,13 @@
       "default": 2,
       "minimum": 1,
       "description": "Minimum length of selection to be highlight"
+    },
+    "highlightSelectionMaxNumberOfWord": {
+      "order": 2,
+      "type": "integer",
+      "default": 2,
+      "minimum": 1,
+      "description": "Max number of words highlighted before cleared"
     },
     "highlightSelectionExcludeScopes": {
       "order": 3,
@@ -78,8 +85,8 @@
     }
   },
   "providedServices": {
-    "quick-highlight": {
-      "description": "quick-highlight events",
+    "auto-highlight": {
+      "description": "auto-highlight events",
       "versions": {
         "1.0.0": "provideQuickHighlight"
       }
